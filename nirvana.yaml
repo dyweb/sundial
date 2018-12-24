@@ -1,0 +1,14 @@
+# This file describes your project. It's used to generate api docs and
+# clients. All fields in this file won't affect nirvana configurations.
+
+project: sundial
+description: Open Source WakaTime Server
+schemes:
+- http
+hosts:
+- localhost:8080
+versions:
+- name: v1
+  description: The v1 version is the first version of this project
+  rules:
+  - prefix: /apis/v1/
