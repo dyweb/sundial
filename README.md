@@ -28,9 +28,9 @@ make
 
 TODO
 
-## Contributing
+## Development Document
 
-TODO
+[devel.md](./docs/devel.md)
 
 ## Authors
 
