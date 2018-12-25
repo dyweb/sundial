@@ -1,7 +1,7 @@
 package descriptors
 
 import (
-	"github.com/dyweb/sundial/pkg/message"
+	"github.com/dyweb/sundial/pkg/handlers/message"
 
 	def "github.com/caicloud/nirvana/definition"
 )
