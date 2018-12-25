@@ -1,6 +1,9 @@
 
 # Sundial
 
+[![Build Status](https://travis-ci.org/dyweb/sundial.svg?branch=master)](https://travis-ci.org/dyweb/sundial)
+[![Coverage Status](https://coveralls.io/repos/github/dyweb/sundial/badge.svg)](https://coveralls.io/github/dyweb/sundial)
+
 Open Source WakaTime Server
 
 ## Getting Started
@@ -35,9 +38,9 @@ We could get the log from `$HOME/.wakatime.log`.
 
 ## Versioning
 
-<!-- Place versions of this project and write comments for every version -->
+### [v1](./pkg/v1)
 
-TODO
+The goal of v1 is to provide the MVP of Sundial, which supports projects, users and durations API.
 
 ## Development Document
 
@@ -46,7 +49,3 @@ TODO
 ## Authors
 
 Please see [AUTHORS.md](./AUTHORS.md).
-
-## License
-
-TODO
