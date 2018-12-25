@@ -23,7 +23,7 @@ type HeartBeat struct {
 	// Language is the language name (optional).
 	Language string `json:"language,omitempty"`
 	// Dependencies is comma separated list of dependencies detected from entity file (optional).
-	Dependencies string `json:"dependencies,omitempty"`
+	Dependencies []string `json:"dependencies,omitempty"`
 	// Lines is the total number of lines in the entity (when entity type is file).
 	Lines int `json:"lines,omitempty"`
 	// Lineno is the current line row number of cursor (optional).
@@ -79,7 +79,7 @@ func POSTHeartBeat(ctx context.Context, username string, heartbeat HeartBeat) (H
 }
 
 // POSTCurrentHeartBeat handles the post method for heartbeat.
-func POSTCurrentHeartBeat(ctx context.Context, heartbeat *HeartBeat) (string, error) {
-	log.Infof("HeartBeat: %v", heartbeat)
-	return "heartbeat", nil
+func POSTCurrentHeartBeat(ctx context.Context, heartbeats []HeartBeat) ([]HeartBeat, error) {
+	log.Infof("%v", heartbeats)
+	return heartbeats, nil
 }
