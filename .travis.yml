@@ -1,0 +1,23 @@
+language: go
+
+go:
+  - "1.9"
+  - "1.10"
+
+go_import_path: github.com/dyweb/sundial
+
+install:
+  - go get -u github.com/golang/dep/cmd/dep
+  - go get github.com/mattn/goveralls
+  - go get -u github.com/alecthomas/gometalinter
+  - dep ensure -v
+  - gometalinter --install
+  - goveralls -service=travis-ci -v -package ./pkg/... -ignore "pkg/apis/*/.*.go,pkg/apis/*/*/*.go"
+
+script:
+  - make
+  - gometalinter --config=linter_config.json --vendor ./...
+
+notifications:
+  webhooks: https://www.travisbuddy.com/
+on_success: never

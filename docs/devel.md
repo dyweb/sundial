@@ -32,7 +32,7 @@ To support durations, we should import a TimeSeries DB to store the data. Projec
       "duration": 641,
       "id": "c429539a-23b8-474b-8c6d-c5d7d4b6f91d",
       "lineno": null,
-      "machine_name_id": "82c7d05e-df05-400c-af75-9741d38e367a",
+      "machine_name_id": "xxxx",
       "project": "gommon",
       "time": 1545552000,
       "user_id": "xxxxxx"
@@ -43,7 +43,7 @@ To support durations, we should import a TimeSeries DB to store the data. Projec
       "duration": 36,
       "id": "a498e488-d7f5-442d-be48-c08e16e928f8",
       "lineno": null,
-      "machine_name_id": "82c7d05e-df05-400c-af75-9741d38e367a",
+      "machine_name_id": "xxxx",
       "project": "memcached-operator",
       "time": 1545552641.13,
       "user_id": "xxxxxx"
