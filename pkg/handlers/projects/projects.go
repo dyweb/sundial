@@ -12,7 +12,7 @@ func GetProjects(ctx context.Context, username string) ([]models.Project, error)
 	// err := ds.CreateProject(&models.Project{
 	// 	Name: "test",
 	// })
-	return []models.Project{}, err
+	return []models.Project{}, nil
 }
 
 // GetCurrentProjects returns the list of projects for the current user.
