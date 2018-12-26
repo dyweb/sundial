@@ -81,6 +81,18 @@
   version = "v1.0"
 
 [[projects]]
+  name = "github.com/jinzhu/gorm"
+  packages = ["."]
+  revision = "472c70caa40267cb89fd8facb07fe6454b578626"
+  version = "v1.9.2"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/jinzhu/inflection"
+  packages = ["."]
+  revision = "04140366298a54a039076d798123ffa108fff46c"
+
+[[projects]]
   name = "github.com/lib/pq"
   packages = [
     ".",
@@ -155,12 +167,6 @@
     "xfs"
   ]
   revision = "1dc9a6cbc91aacc3e8b2d63db4d2e957a5394ac4"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/russross/meddler"
-  packages = ["."]
-  revision = "87a225081a7cb35c4f5f8d0977a79105e5287115"
 
 [[projects]]
   name = "github.com/spf13/afero"
@@ -242,6 +248,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "cd07ab28db1cf686ea8e5a791b1258f65f8be7888605073fd3c37cd10f4e8843"
+  inputs-digest = "deb7175931579da68d8d36d00834197a28379ea006f8863924d24b7768c8be76"
   solver-name = "gps-cdcl"
   solver-version = 1
