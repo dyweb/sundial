@@ -4,15 +4,14 @@ import (
 	"context"
 
 	"github.com/dyweb/sundial/pkg/models"
-	"github.com/dyweb/sundial/pkg/store"
 )
 
 // GetProjects returns the list of projects for the given user.
 func GetProjects(ctx context.Context, username string) ([]models.Project, error) {
-	ds := store.FromContext(ctx)
-	err := ds.CreateProject(&models.Project{
-		Name: "test",
-	})
+	// ds := store.FromContext(ctx)
+	// err := ds.CreateProject(&models.Project{
+	// 	Name: "test",
+	// })
 	return []models.Project{}, err
 }
 

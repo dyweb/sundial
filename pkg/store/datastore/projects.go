@@ -1,19 +1,19 @@
 package datastore
 
 import (
-	"github.com/russross/meddler"
+	"github.com/google/uuid"
 
 	"github.com/dyweb/sundial/pkg/models"
 )
 
 const projectTable = "projects"
 
-func (db *datastore) GetProject(id int64) (*models.Project, error) {
-	var project = new(models.Project)
-	var err = meddler.Load(db, projectTable, project, id)
+func (ds *datastore) GetProject(UUID uuid.UUID) (*models.Project, error) {
+	var project = &models.Project{}
+	err := ds.First(project, "id = ?", UUID).Error
 	return project, err
 }
 
-func (db *datastore) CreateProject(project *models.Project) error {
-	return meddler.Insert(db, projectTable, project)
+func (ds *datastore) CreateProject(project *models.Project) error {
+	return ds.Create(project).Error
 }
