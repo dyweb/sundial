@@ -6,8 +6,6 @@ import (
 	"github.com/dyweb/sundial/pkg/models"
 )
 
-const projectTable = "projects"
-
 func (ds *datastore) GetProject(UUID uuid.UUID) (*models.Project, error) {
 	var project = &models.Project{}
 	err := ds.First(project, "id = ?", UUID).Error
