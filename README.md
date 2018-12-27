@@ -8,10 +8,10 @@ Open Source WakaTime Server
 
 ## Getting Started
 
-### Prerequisites
+### Main Dependencies
 
-- golang
-- dep
+- [caicloud/nirvana](https://github.com/caicloud/nirvana) Golang Restful API Framework for Productivity
+- [jinzhu/gorm](https://github.com/jinzhu/gorm) The fantastic ORM library for Golang, aims to be developer friendly
 
 ### Building
 
@@ -38,7 +38,7 @@ We could get the log from `$HOME/.wakatime.log`.
 
 ## Versioning
 
-### [v1](./pkg/v1)
+### [v1](./pkg/apis/v1)
 
 The goal of v1 is to provide the MVP of Sundial, which supports projects, users and durations API.
 

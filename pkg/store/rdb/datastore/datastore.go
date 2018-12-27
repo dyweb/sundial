@@ -7,7 +7,7 @@ import (
 	"github.com/jinzhu/gorm"
 
 	"github.com/dyweb/sundial/pkg/models"
-	"github.com/dyweb/sundial/pkg/store"
+	"github.com/dyweb/sundial/pkg/store/rdb"
 )
 
 // datastore is an implementation of a model.Store built on top
@@ -21,7 +21,7 @@ type datastore struct {
 
 // New creates a database connection for the given driver and datasource
 // and returns a new Store.
-func New(driver, config string) store.Store {
+func New(driver, config string) rdb.Store {
 	ds := &datastore{
 		DB:     open(driver, config),
 		driver: driver,
