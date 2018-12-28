@@ -8,7 +8,7 @@ import (
 
 // GetProjects returns the list of projects for the given user.
 func GetProjects(ctx context.Context, username string) ([]models.Project, error) {
-	// ds := store.FromContext(ctx)
+	// ds := rdb.FromContext(ctx)
 	// err := ds.CreateProject(&models.Project{
 	// 	Name: "test",
 	// })
