@@ -3,19 +3,19 @@ package heartbeats
 import (
 	"context"
 
-	"github.com/caicloud/nirvana/log"
-
 	"github.com/dyweb/sundial/pkg/models"
+	"github.com/dyweb/sundial/pkg/store/tsdb"
 )
 
 // POSTHeartBeat handles the post method for heartbeat.
-func POSTHeartBeat(ctx context.Context, username string, heartbeat models.HeartBeat) (models.HeartBeat, error) {
-	log.Infof("HeartBeat: %v", heartbeat)
-	return heartbeat, nil
+func POSTHeartBeat(ctx context.Context, username string,
+	heartbeats []models.HeartBeatFrontModel) ([]models.HeartBeatFrontModel, error) {
+	tsstore := tsdb.FromContext(ctx)
+	err := tsstore.WriteHeartBeats(username, heartbeats)
+	return heartbeats, err
 }
 
 // POSTCurrentHeartBeat handles the post method for heartbeat.
-func POSTCurrentHeartBeat(ctx context.Context, heartbeats []models.HeartBeat) ([]models.HeartBeat, error) {
-	log.Infof("%v", heartbeats)
-	return heartbeats, nil
+func POSTCurrentHeartBeat(ctx context.Context, heartbeats []models.HeartBeatFrontModel) ([]models.HeartBeatFrontModel, error) {
+	return POSTHeartBeat(ctx, "current", heartbeats)
 }
