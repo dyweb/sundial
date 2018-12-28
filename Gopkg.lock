@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  name = "cloud.google.com/go"
+  packages = ["civil"]
+  revision = "0ebda48a7f143b1cce9eb37a8c1106ac762a3430"
+  version = "v0.34.0"
+
+[[projects]]
   branch = "master"
   name = "github.com/beorn7/perks"
   packages = ["quantile"]
@@ -26,6 +32,15 @@
     "utils/printer"
   ]
   revision = "9c460c1fe404908d1f72d7907c6b4bfc6b829795"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/denisenkom/go-mssqldb"
+  packages = [
+    ".",
+    "internal/cp"
+  ]
+  revision = "4e0d7dc8888fbb59764060e99b7b68e77a6f9698"
 
 [[projects]]
   name = "github.com/fsnotify/fsnotify"
@@ -101,7 +116,13 @@
 
 [[projects]]
   name = "github.com/jinzhu/gorm"
-  packages = ["."]
+  packages = [
+    ".",
+    "dialects/mssql",
+    "dialects/mysql",
+    "dialects/postgres",
+    "dialects/sqlite"
+  ]
   revision = "472c70caa40267cb89fd8facb07fe6454b578626"
   version = "v1.9.2"
 
@@ -115,6 +136,7 @@
   name = "github.com/lib/pq"
   packages = [
     ".",
+    "hstore",
     "oid"
   ]
   revision = "4ded0e9383f75c197b3a2aaa6d590ac52df6fd79"
@@ -228,6 +250,12 @@
 
 [[projects]]
   branch = "master"
+  name = "golang.org/x/crypto"
+  packages = ["md4"]
+  revision = "505ab145d0a99da450461ae2c1a9f6cd10d1f447"
+
+[[projects]]
+  branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
   revision = "b4a75ba826a64a70990f11a225237acd6ef35c9f"
@@ -261,6 +289,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "c43f3c6ec0c43cc44c5f42cae6fe3096b5340c2079edc16178254f8806f22c2f"
+  inputs-digest = "af7d75dd9941df76c8ecb33ea8b9144da8c06eec8a52b9c62da4ab819207dd09"
   solver-name = "gps-cdcl"
   solver-version = 1

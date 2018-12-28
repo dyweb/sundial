@@ -38,7 +38,7 @@ func (i *DBInstaller) Install(builder service.Builder, cfg *nirvana.Config) erro
 			Middlewares: []def.Middleware{
 				func(ctx context.Context, next def.Chain) error {
 					s := rdbstore.New(c.RDBDriver, c.RDBSource)
-					ts := influx.New(c.TSDBSource, c.TSDBUsername, c.TSDBPassword)
+					ts := influx.New(c.TSDBSource, c.TSDBUsername, c.TSDBPassword, c.TSDBName)
 					newCtx := tsdb.ToContext(rdb.ToContext(ctx, s), ts)
 					return next.Continue(newCtx)
 				},

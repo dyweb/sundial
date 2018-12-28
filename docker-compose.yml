@@ -1,0 +1,40 @@
+# Using version 3 to provide play-with-docker badge
+# You can change to version 2 without breaking.
+#version: '2'
+version: '2'
+services:
+  database:
+    image: influxdb:1.7-alpine
+    environment:
+      - INFLUXDB_DB=sundial
+      - INFLUXDB_USER=user
+      - INFLUXDB_USER_PASSWORD=password
+    ports:
+      - "8086:8086"
+    volumes:
+      - database:/var/lib/postgresql/data
+    networks:
+      backend:
+    restart: always
+
+  app:
+    image: sundial:v0.1.0
+    environment:
+      - SUNDIAL_DB_TSDB_SOURCE=http://database:8086
+    ports:
+      - "8080:8080"
+    networks:
+      backend:
+    restart: always
+    depends_on:
+      - database
+
+# Define networks to allow best isolation
+networks:
+  # Internal network for communication with PostgreSQL/MySQL
+  backend:
+
+# Define named volumes so data stays in place
+volumes:
+  # Volume for PostgreSQL/MySQL database
+  database:

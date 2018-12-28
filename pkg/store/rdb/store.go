@@ -1,8 +1,13 @@
 package rdb
 
 import (
-	"github.com/dyweb/sundial/pkg/models"
 	"github.com/google/uuid"
+	_ "github.com/jinzhu/gorm/dialects/mssql"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
+
+	"github.com/dyweb/sundial/pkg/models"
 )
 
 // Store is the interface of data store.

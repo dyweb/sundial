@@ -1,4 +1,4 @@
-FROM golang:latest
+FROM golang:1.10
 
 WORKDIR /go/src/github.com/dyweb/sundial
 
@@ -16,7 +16,7 @@ ARG COMMIT=
 
 ARG TARGET=sundial
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64                      \
+RUN GOOS=linux GOARCH=amd64                      \
 	go build -i -v -o /tmp/${TARGET}                  \
 	-ldflags "-s -w -X ${ROOT}/pkg/version.Version=${VERSION}  \
 	-X ${ROOT}/pkg/version.Commit=${COMMIT}                    \
