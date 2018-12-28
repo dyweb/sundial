@@ -1,7 +1,7 @@
 package tsdb
 
 import (
-	"golang.org/x/net/context"
+	"context"
 )
 
 type ContextKey string
