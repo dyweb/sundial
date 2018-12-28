@@ -17,7 +17,7 @@ func New(source, username, pwd string) *DataStore {
 		Password: pwd,
 	})
 	if err != nil {
-		log.Fatal("Failed to create the tsdb datastore: %v", err)
+		log.Fatalf("Failed to create the tsdb datastore: %v", err)
 	}
 	return &DataStore{
 		Client: c,
