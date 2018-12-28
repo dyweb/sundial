@@ -81,6 +81,25 @@
   version = "v1.0"
 
 [[projects]]
+  name = "github.com/influxdata/influxdb"
+  packages = [
+    "client/v2",
+    "models",
+    "pkg/escape"
+  ]
+  revision = "76f907b0fada2f16931e37471da695349fcdf8c6"
+  version = "v1.7.2"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/influxdata/platform"
+  packages = [
+    "models",
+    "pkg/escape"
+  ]
+  revision = "f5b0bdeb12f9d47233fd5008c93fd8b7e6ddfd16"
+
+[[projects]]
   name = "github.com/jinzhu/gorm"
   packages = ["."]
   revision = "472c70caa40267cb89fd8facb07fe6454b578626"
@@ -209,12 +228,6 @@
 
 [[projects]]
   branch = "master"
-  name = "golang.org/x/net"
-  packages = ["context"]
-  revision = "927f97764cc334a6575f4b7a1584a147864d5723"
-
-[[projects]]
-  branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
   revision = "b4a75ba826a64a70990f11a225237acd6ef35c9f"
@@ -248,6 +261,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "deb7175931579da68d8d36d00834197a28379ea006f8863924d24b7768c8be76"
+  inputs-digest = "c43f3c6ec0c43cc44c5f42cae6fe3096b5340c2079edc16178254f8806f22c2f"
   solver-name = "gps-cdcl"
   solver-version = 1

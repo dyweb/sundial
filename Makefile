@@ -63,6 +63,9 @@ build:
 	    $(CMD_DIR)/$${target};                                                         \
 	done
 
+run: build
+	./bin/sundial
+
 mod-reset-vendor:
 	@$(shell [ -f go.mod ] && go mod vendor)
 

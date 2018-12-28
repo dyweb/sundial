@@ -1,4 +1,4 @@
-package store
+package rdb
 
 import (
 	"github.com/dyweb/sundial/pkg/models"

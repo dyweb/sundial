@@ -3,11 +3,6 @@ package main
 import (
 	"fmt"
 
-	"github.com/dyweb/sundial/pkg/apis"
-	"github.com/dyweb/sundial/pkg/apis/filters"
-	"github.com/dyweb/sundial/pkg/apis/modifiers"
-	"github.com/dyweb/sundial/pkg/version"
-
 	"github.com/caicloud/nirvana"
 	"github.com/caicloud/nirvana/config"
 	"github.com/caicloud/nirvana/log"
@@ -15,6 +10,12 @@ import (
 	"github.com/caicloud/nirvana/plugins/metrics"
 	"github.com/caicloud/nirvana/plugins/reqlog"
 	pversion "github.com/caicloud/nirvana/plugins/version"
+
+	"github.com/dyweb/sundial/pkg/apis"
+	"github.com/dyweb/sundial/pkg/apis/filters"
+	"github.com/dyweb/sundial/pkg/apis/modifiers"
+	store "github.com/dyweb/sundial/pkg/store/plugin"
+	"github.com/dyweb/sundial/pkg/version"
 )
 
 func main() {
@@ -22,9 +23,10 @@ func main() {
 	fmt.Println(nirvana.Logo, nirvana.Banner)
 
 	// Create nirvana command.
-	cmd := config.NewNamedNirvanaCommand("server", config.NewDefaultOption())
+	cmd := config.NewNamedNirvanaCommand("sundial", config.NewDefaultOption())
 
 	// Create plugin options.
+	dbOption := store.NewDefaultOption()        // Store plugin.
 	metricsOption := metrics.NewDefaultOption() // Metrics plugin.
 	loggerOption := logger.NewDefaultOption()   // Logger plugin.
 	reqlogOption := reqlog.NewDefaultOption()   // Request log plugin.
@@ -36,7 +38,7 @@ func main() {
 	)
 
 	// Enable plugins.
-	cmd.EnablePlugin(metricsOption, loggerOption, reqlogOption, versionOption)
+	cmd.EnablePlugin(metricsOption, loggerOption, reqlogOption, versionOption, dbOption)
 
 	// Create server config.
 	serverConfig := nirvana.NewConfig()

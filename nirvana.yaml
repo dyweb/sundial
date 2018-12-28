@@ -12,3 +12,6 @@ versions:
   description: The v1 version is the first version of this project
   rules:
   - prefix: /apis/v1/
+# sundial:
+#   db:
+#     rdbDriver: "12"
