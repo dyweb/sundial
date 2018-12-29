@@ -7,7 +7,7 @@ import (
 
 type Project struct {
 	gorm.Model
-	UUID            uuid.UUID      `json:"id" gorm:"PRIMARY_KEY"`
+	UUID            uuid.UUID      `json:"id"`
 	Name            string         `json:"name"`
 	HTMLEscapedName string         `json:"html_escaped_name"`
 	Privacy         string         `json:"privacy"`
