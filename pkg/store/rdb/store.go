@@ -16,4 +16,10 @@ type Store interface {
 	GetProject(UUID uuid.UUID) (*models.Project, error)
 	// CreateProject creates a new project.
 	CreateProject(*models.Project) error
+	// GetProjects gets all projects.
+	GetProjects() ([]models.Project, error)
+	// GetMessage gets a message with corresponding id.
+	GetMessage(id int) (*models.Message, error)
+	// GetMessages gets all messages.
+	GetMessages() ([]models.Message, error)
 }
