@@ -56,6 +56,7 @@ func main() {
 		PreServeFunc: func(config *nirvana.Config, server nirvana.Server) error {
 			// Output project information.
 			config.Logger().Infof("Package:%s Version:%s Commit:%s", version.Package, version.Version, version.Commit)
+			// TODO(gaocegege): Register Cron jobs.
 			return nil
 		},
 	})
