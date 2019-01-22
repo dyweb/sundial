@@ -85,10 +85,16 @@ func (ds DataStore) QueryHeartBeats(begin time.Time, end time.Time) ([]models.He
 	for _, result := range responses.Results {
 		for _, row := range result.Series {
 			for _, onepoint := range row.Values {
-				//TODO: create a model, use switch case
 				hb := models.HeartBeatFrontModel{}
+				//TODO: currently some fields of HB is not stored into influxDB
+				//so when we retrieve it back we could only get empty placeholders.
+				//someday we may be able to store them.
+				hb.Dependencies = []string{}
+
 				for i := 0; i < len(onepoint); i++ {
 					switch row.Columns[i] {
+					case "time":
+						hb.Time = onepoint[i].(float64)
 					case "user":
 						//TODO: heartbeat model does not save username now
 					case "entity":
