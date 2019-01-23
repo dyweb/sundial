@@ -26,4 +26,6 @@ type Store interface {
 	// project: optional. nil means all projects.
 	// branches: optional. nil means all branches. empty array means no branches (and empty result).
 	GetDurations(user string, date time.Time, project string, branches []string) ([]models.StoredDuration, error)
+	//CreateStat saves a stat.
+	CreateStat(*models.Stat) error
 }
