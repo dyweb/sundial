@@ -46,7 +46,7 @@ func calculateStat(hbs []models.HeartBeatFrontModel, beginTime time.Time, statRa
 	stat.IsStuck = false
 	stat.IsUpToDate = true
 	stat.Status = "ok"
-	// these 3 fields are set empty for now, see [process.md](docs/devel.md)
+	// these 3 fields are set empty for now, see [process.md](docs/process.md)
 	stat.Editors = []models.Workunit{}
 	stat.OperatingSystems = []models.Workunit{}
 	stat.Dependencies = []models.Workunit{}
