@@ -11,21 +11,21 @@ import (
 type Stat struct {
 	gorm.Model
 	UUID             uuid.UUID  `json:"id"`
-	TotalSeconds     int        `json:"total_seconds"`
-	Project          []Workunit `json:"projects"`
+	TotalSeconds     int64      `json:"total_seconds"`
+	Projects         []Workunit `json:"projects"`
 	Languages        []Workunit `json:"languages"`
 	Editors          []Workunit `json:"editors"`
 	OperatingSystems []Workunit `json:"operating_systems"`
 	Dependencies     []Workunit `json:"dependencies"`
 	BestDay          struct {
 		Date         time.Time `json:"date"`
-		TotalSeconds int       `json:"total_seconds"`
+		TotalSeconds int64     `json:"total_seconds"`
 	} `json:"best_day"`
 	Range StatRange `json:"range"`
 	//Holidays is number of days in this range with no coding time logged
-	Holidays              int `json:"holidays"`
-	DaysIncludingHolidays int `json:"days_including_holidays"`
-	DaysMinusHolidays     int `json:"days_minus_holidays"`
+	Holidays              int64 `json:"holidays"`
+	DaysIncludingHolidays int64 `json:"days_including_holidays"`
+	DaysMinusHolidays     int64 `json:"days_minus_holidays"`
 	//Status is "ok"
 	Status string `json:"status"`
 	//is_already_updating is true if these stats are being updated in the background
@@ -49,7 +49,7 @@ type Stat struct {
 	End int64 `json:"end"`
 	//timezone is timezone used in Olson Country/Region format
 	Timezone string `json:"timezone"`
-	//timeout is value of the user's timeout setting in minutes
+	//timeout is value of the user's timeout setting in seconds
 	Timeout int64 `json:"timeout"`
 	//writes_only is status of the user's writes_only setting
 	WritesOnly bool `json:"writes_only"`
