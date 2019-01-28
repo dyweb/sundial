@@ -57,52 +57,67 @@ func calculateStat(hbs []models.HeartBeatFrontModel, beginTime time.Time, statRa
 	stat.WritesOnly = false
 	stat.UserID = uuid.UUID{} //now just a random uuid
 	stat.Username = "currentUser"
+
 	// part 3: aggregations
-	totalSeconds := float64(0)
-	prevEnd := float64(0)
-	// days: we define day as 24hour-aligned times.
-	// Not that fancy considering leap seconds or so.
-	days, workdays, prevDay := int64(0), int64(0), dayFromFloatUnix(hbs[0].Time)
-	bestDay, bestDaySeconds, thisDaySeconds := prevDay, float64(0), float64(0)
+	stat.DaysIncludingHolidays = int64(toDuration(statRange)) / int64(time.Hour*24)
 
-	projects := Workunits{units: make(map[string]WorkunitWithEndtime)}
-	languages := Workunits{units: make(map[string]WorkunitWithEndtime)}
-	for _, hb := range hbs {
-		upsertWorkunit(&projects, hb.Project, hb.Time, jiffy)
-		upsertWorkunit(&languages, hb.Language, hb.Time, jiffy)
-		elapsed, newEnd := mergeIntervals(prevEnd, hb.Time, jiffy)
-		totalSeconds += elapsed
-		prevEnd = newEnd
+	if len(hbs) > 0 {
+		totalSeconds := float64(0)
+		prevEnd := float64(0)
+		// days: we define day as 24hour-aligned times.
+		// Not that fancy considering leap seconds or so.
+		workdays, prevDay := int64(0), dayFromFloatUnix(hbs[0].Time)
+		bestDay, bestDaySeconds, thisDaySeconds := prevDay, float64(0), float64(0)
 
-		day := dayFromFloatUnix(hb.Time)
-		if day != prevDay {
-			days += int64(day.Sub(prevDay)) / int64(time.Hour*24)
-			workdays++
+		projects := Workunits{units: make(map[string]WorkunitWithEndtime)}
+		languages := Workunits{units: make(map[string]WorkunitWithEndtime)}
+		for _, hb := range hbs {
+			upsertWorkunit(&projects, hb.Project, hb.Time, jiffy)
+			upsertWorkunit(&languages, hb.Language, hb.Time, jiffy)
+			elapsed, newEnd := mergeIntervals(prevEnd, hb.Time, jiffy)
+			totalSeconds += elapsed
+			prevEnd = newEnd
 
-			if thisDaySeconds > bestDaySeconds {
-				bestDay, bestDaySeconds = day, thisDaySeconds
+			day := dayFromFloatUnix(hb.Time)
+			if day != prevDay {
+				workdays++
+
+				if thisDaySeconds > bestDaySeconds {
+					bestDay, bestDaySeconds = day, thisDaySeconds
+				}
+
+				prevDay = day
+				thisDaySeconds = 0.0
+
+			} else {
+				thisDaySeconds += elapsed
 			}
-
-			prevDay = day
-			thisDaySeconds = 0.0
-
-		} else {
-			thisDaySeconds += elapsed
 		}
-	}
-	stat.Projects = percentedWorkunits(projects)
-	stat.Languages = percentedWorkunits(languages)
-	stat.DaysIncludingHolidays = days + 1
-	stat.DaysMinusHolidays = workdays + 1
-	stat.Holidays = stat.DaysIncludingHolidays - stat.DaysMinusHolidays
-	stat.BestDay.Date = bestDay
-	stat.BestDay.TotalSeconds = int64(bestDaySeconds)
+		stat.Projects = percentedWorkunits(projects)
+		stat.Languages = percentedWorkunits(languages)
 
-	// part 4: whole-stat data
+		stat.DaysMinusHolidays = workdays + 1
+		stat.Holidays = stat.DaysIncludingHolidays - stat.DaysMinusHolidays
+		stat.BestDay.Date = bestDay
+		stat.BestDay.TotalSeconds = int64(bestDaySeconds)
+		stat.Start = int64(hbs[0].Time)
+		stat.End = int64(hbs[len(hbs)-1].Time + jiffy)
+		stat.TotalSeconds = int64(totalSeconds)
+	} else {
+		//if there are no hbs in this range
+		stat.Projects = []models.Workunit{}
+		stat.Languages = []models.Workunit{}
+		stat.DaysMinusHolidays = 0
+		stat.Holidays = stat.DaysIncludingHolidays
+		stat.BestDay.Date = beginTime
+		stat.BestDay.TotalSeconds = 0
+		stat.Start = beginTime.Unix()
+		stat.End = beginTime.Add(toDuration(statRange)).Unix()
+		stat.TotalSeconds = 0
+	}
+
+	// part 4: metadata
 	stat.Range = statRange
-	stat.Start = int64(hbs[0].Time)
-	stat.End = int64(hbs[len(hbs)-1].Time + jiffy)
-	stat.TotalSeconds = int64(totalSeconds)
 	stat.CreatedAt = time.Now()
 	stat.ModifiedAt = stat.CreatedAt
 
@@ -125,7 +140,7 @@ func mergeIntervals(prevEnd float64, start float64, jiffy float64) (elapsed floa
 
 func upsertWorkunit(workunits *Workunits, name string, start float64, jiffy float64) {
 	/* if such name does not exist, create one ending in 1970 */
-	if wu, ok := workunits.units[name]; !ok {
+	if _, ok := workunits.units[name]; !ok {
 		workunits.units[name] = WorkunitWithEndtime{
 			Workunit: models.Workunit{
 				Name:         name,
@@ -137,7 +152,7 @@ func upsertWorkunit(workunits *Workunits, name string, start float64, jiffy floa
 	}
 
 	/* update it */
-	wu, ok := workunits.units[name]
+	wu, _ := workunits.units[name]
 	elapsed, newEnd := mergeIntervals(wu.Endtime, start, jiffy)
 	wu.Endtime = newEnd
 	wu.TotalSeconds += int64(elapsed)
