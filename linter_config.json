@@ -9,7 +9,6 @@
     "goimports",
     "varcheck",
     "staticcheck",
-    "gosimple",
     "lll",
     "unconvert",
     "misspell",
