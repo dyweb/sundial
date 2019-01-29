@@ -152,7 +152,7 @@ func upsertWorkunit(workunits *Workunits, name string, start float64, jiffy floa
 	}
 
 	/* update it */
-	wu, _ := workunits.units[name]
+	wu := workunits.units[name]
 	elapsed, newEnd := mergeIntervals(wu.Endtime, start, jiffy)
 	wu.Endtime = newEnd
 	wu.TotalSeconds += int64(elapsed)
@@ -165,7 +165,7 @@ type WorkunitWithEndtime struct {
 	Endtime float64
 }
 
-//calculate percents for each wu, and return apporpriate type for output.
+//calculate percents for each wu, and return appropriate type for output.
 func percentedWorkunits(wus Workunits) []models.Workunit {
 	outputs := make([]models.Workunit, len(wus.units))
 	for _, wu := range wus.units {
