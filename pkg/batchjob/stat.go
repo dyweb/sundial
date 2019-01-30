@@ -1,20 +1,38 @@
 package batchjob
 
 import (
+	"fmt"
 	"log"
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/robfig/cron"
 
 	"github.com/dyweb/sundial/pkg/models"
 	"github.com/dyweb/sundial/pkg/store/rdb"
 	"github.com/dyweb/sundial/pkg/store/tsdb"
 )
 
+//AddCronJob returns a function that could be passed to the cron library.
+func AddCronJob(rdbStore rdb.Store, tsStore tsdb.Store, statRange models.StatRange) func(*cron.Cron) {
+	job := func() {
+		now := time.Now()
+		err := StatWorker(rdbStore, tsStore, now, statRange)
+		if err != nil {
+			fmt.Printf("Error during stat cron at time %s: %s\n", now, err)
+		}
+	}
+	return func(c *cron.Cron) {
+		c.Schedule(
+			cron.Every(ToDuration(statRange)),
+			cron.FuncJob(job))
+	}
+}
+
 //StatWorker collects heartbeats from tsdb and writes stat to rdb
 //collects heartbeats from `startTime` with a given range length
 func StatWorker(rdbStore rdb.Store, tsStore tsdb.Store, beginTime time.Time, statRange models.StatRange) error {
-	hbs, err := tsStore.QueryHeartBeats(beginTime, beginTime.Add(toDuration(statRange)))
+	hbs, err := tsStore.QueryHeartBeats(beginTime, beginTime.Add(ToDuration(statRange)))
 	if err != nil {
 		return err
 	}
@@ -59,7 +77,7 @@ func calculateStat(hbs []models.HeartBeatFrontModel, beginTime time.Time, statRa
 	stat.Username = "currentUser"
 
 	// part 3: aggregations
-	stat.DaysIncludingHolidays = int64(toDuration(statRange)) / int64(time.Hour*24)
+	stat.DaysIncludingHolidays = int64(ToDuration(statRange)) / int64(time.Hour*24)
 
 	if len(hbs) > 0 {
 		totalSeconds := float64(0)
@@ -112,7 +130,7 @@ func calculateStat(hbs []models.HeartBeatFrontModel, beginTime time.Time, statRa
 		stat.BestDay.Date = beginTime
 		stat.BestDay.TotalSeconds = 0
 		stat.Start = beginTime.Unix()
-		stat.End = beginTime.Add(toDuration(statRange)).Unix()
+		stat.End = beginTime.Add(ToDuration(statRange)).Unix()
 		stat.TotalSeconds = 0
 	}
 
@@ -181,11 +199,11 @@ type Workunits struct {
 	totalSeconds float64
 }
 
-//toDuration converts semantics of statRange into time.Duration.
+//ToDuration converts semantics of statRange into time.Duration.
 //FIXME: it is an approximation.
 //To get real duration, we have to decide whether use calendar date or duration date
 //and have to have another argument of beginTime.
-func toDuration(statRange models.StatRange) time.Duration {
+func ToDuration(statRange models.StatRange) time.Duration {
 	switch statRange {
 	case models.StatRangeLast7Days:
 		return time.Hour * 24 * 7

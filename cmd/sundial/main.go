@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 
+	"github.com/robfig/cron"
+
 	"github.com/caicloud/nirvana"
 	"github.com/caicloud/nirvana/config"
 	"github.com/caicloud/nirvana/log"
@@ -14,11 +16,29 @@ import (
 	"github.com/dyweb/sundial/pkg/apis"
 	"github.com/dyweb/sundial/pkg/apis/filters"
 	"github.com/dyweb/sundial/pkg/apis/modifiers"
+	"github.com/dyweb/sundial/pkg/batchjob"
+	"github.com/dyweb/sundial/pkg/models"
+	"github.com/dyweb/sundial/pkg/store/plugin"
 	store "github.com/dyweb/sundial/pkg/store/plugin"
+	rdbstore "github.com/dyweb/sundial/pkg/store/rdb/datastore"
+	"github.com/dyweb/sundial/pkg/store/tsdb/influx"
 	"github.com/dyweb/sundial/pkg/version"
 )
 
 func main() {
+
+	//register cron for batchjob.
+	//quick and dirty
+	//TODO: shall have a registering mechaism, instead of hardcoding here.
+	c := plugin.NewDefaultOption()
+	s := rdbstore.New(c.RDBDriver, c.RDBSource)
+	ts := influx.New(c.TSDBSource, c.TSDBUsername, c.TSDBPassword, c.TSDBName)
+	crontab := cron.New()
+	batchjob.AddCronJob(s, ts, models.StatRangeLast30Days)(crontab)
+	batchjob.AddCronJob(s, ts, models.StatRangeLast6Months)(crontab)
+	batchjob.AddCronJob(s, ts, models.StatRangeLast7Days)(crontab)
+	batchjob.AddCronJob(s, ts, models.StatRangeLastYear)(crontab)
+
 	// Print nirvana banner.
 	fmt.Println(nirvana.Logo, nirvana.Banner)
 
