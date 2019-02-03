@@ -2,7 +2,6 @@ package batchjob
 
 import (
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/google/uuid"
@@ -14,7 +13,7 @@ import (
 )
 
 //AddCronJob returns a function that could be passed to the cron library.
-func AddCronJob(rdbStore rdb.Store, tsStore tsdb.Store, statRange models.StatRange) func(*cron.Cron) {
+func AddCronJob(c *cron.Cron, rdbStore rdb.Store, tsStore tsdb.Store, statRange models.StatRange) {
 	job := func() {
 		now := time.Now()
 		err := StatWorker(rdbStore, tsStore, now, statRange)
@@ -22,11 +21,10 @@ func AddCronJob(rdbStore rdb.Store, tsStore tsdb.Store, statRange models.StatRan
 			fmt.Printf("Error during stat cron at time %s: %s\n", now, err)
 		}
 	}
-	return func(c *cron.Cron) {
-		c.Schedule(
-			cron.Every(ToDuration(statRange)),
-			cron.FuncJob(job))
-	}
+	c.Schedule(
+		cron.Every(ToDuration(statRange)),
+		cron.FuncJob(job))
+
 }
 
 //StatWorker collects heartbeats from tsdb and writes stat to rdb
@@ -56,26 +54,26 @@ func calculateStat(hbs []models.HeartBeatFrontModel, beginTime time.Time, statRa
 	//TODO: make jiffy configurable, e.g. argument of the cmd
 	jiffy := 60.0 //seconds for one minute
 
-	stat := models.Stat{}
-	// part 1: hardcoded fields
-	stat.IsAlreadyUpdating = false
-	stat.IsCodingActivityVisible = true
-	stat.IsOtherUsageVisible = true
-	stat.IsStuck = false
-	stat.IsUpToDate = true
-	stat.Status = "ok"
-	// these 3 fields are set empty for now, see [process.md](docs/process.md)
-	stat.Editors = []models.Workunit{}
-	stat.OperatingSystems = []models.Workunit{}
-	stat.Dependencies = []models.Workunit{}
-	// part 2: fields that should be read from User
-	//TODO: fix them when we introduce a user
-	stat.Timeout = 60
-	stat.Timezone = "America/Los_Angeles"
-	stat.WritesOnly = false
-	stat.UserID = uuid.UUID{} //now just a random uuid
-	stat.Username = "currentUser"
-
+	stat := models.Stat{
+		// part 1: hardcoded fields
+		IsAlreadyUpdating:       false,
+		IsCodingActivityVisible: true,
+		IsOtherUsageVisible:     true,
+		IsStuck:                 false,
+		IsUpToDate:              true,
+		Status:                  "ok",
+		// these 3 fields are set empty for now, see [process.md](docs/process.md)
+		Editors:          []models.Workunit{},
+		OperatingSystems: []models.Workunit{},
+		Dependencies:     []models.Workunit{},
+		// part 2: fields that should be read from User
+		//TODO: fix them when we introduce a user
+		Timeout:    60,
+		Timezone:   "America/Los_Angeles",
+		WritesOnly: false,
+		UserID:     uuid.UUID{}, //now just a random uuid
+		Username:   "currentUser",
+	}
 	// part 3: aggregations
 	stat.DaysIncludingHolidays = int64(ToDuration(statRange)) / int64(time.Hour*24)
 
@@ -157,7 +155,7 @@ func mergeIntervals(prevEnd float64, start float64, jiffy float64) (elapsed floa
 }
 
 func upsertWorkunit(workunits *Workunits, name string, start float64, jiffy float64) {
-	/* if such name does not exist, create one ending in 1970 */
+	// if such name does not exist, create one ending in 1970
 	if _, ok := workunits.units[name]; !ok {
 		workunits.units[name] = WorkunitWithEndtime{
 			Workunit: models.Workunit{
@@ -213,10 +211,10 @@ func ToDuration(statRange models.StatRange) time.Duration {
 		return time.Hour * 24 * 30 * 6
 	case models.StatRangeLastYear:
 		return time.Hour * 24 * 365
+	default:
+		// will not happen
+		panic("unexpected case of statRange")
 	}
-	// will not happen
-	log.Fatalln("unexpected case of statRange")
-	return 0
 }
 
 func dayFromFloatUnix(unix float64) time.Time {

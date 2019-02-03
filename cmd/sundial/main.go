@@ -34,10 +34,10 @@ func main() {
 	s := rdbstore.New(c.RDBDriver, c.RDBSource)
 	ts := influx.New(c.TSDBSource, c.TSDBUsername, c.TSDBPassword, c.TSDBName)
 	crontab := cron.New()
-	batchjob.AddCronJob(s, ts, models.StatRangeLast30Days)(crontab)
-	batchjob.AddCronJob(s, ts, models.StatRangeLast6Months)(crontab)
-	batchjob.AddCronJob(s, ts, models.StatRangeLast7Days)(crontab)
-	batchjob.AddCronJob(s, ts, models.StatRangeLastYear)(crontab)
+	batchjob.AddCronJob(crontab, s, ts, models.StatRangeLast30Days)
+	batchjob.AddCronJob(crontab, s, ts, models.StatRangeLast6Months)
+	batchjob.AddCronJob(crontab, s, ts, models.StatRangeLast7Days)
+	batchjob.AddCronJob(crontab, s, ts, models.StatRangeLastYear)
 
 	// Print nirvana banner.
 	fmt.Println(nirvana.Logo, nirvana.Banner)
