@@ -8,6 +8,10 @@
 - https://wakatime.com/developers#heartbeats
 - https://wakatime.com/developers#durations
 - https://wakatime.com/developers#stats
+    - `catrgories` means `Coding`, `Designing` and other activities. For now we ignore this field, as most editors actually only cares about `Coding`.
+    - `editor`: in CLI, `editor` is not a dedicated field but part of the User-Agent, which we would not parse. For not just let `editor` field be empty.
+    - `operating_systems`: in CLI, `operating_systems` is not a dedicated field but part of the User-Agent, which we would not parse. For not just let `operating_systems` field be empty. 
+    - `dependencies`: a HeartBeat can hold multiple dependencies. Due to implementation issues, for now we do not save it to the InfluxDB, nor do we count them in stat, and let `dependencies` field be empty. 
 - https://wakatime.com/developers#users
 
 ### Medium Priority

@@ -178,5 +178,4 @@ func wrapper(c *nirvana.Config, f func(c *Option)) {
 		cfg = conf.(*Option)
 	}
 	f(cfg)
-	c.Set(ExternalConfigName, cfg)
 }
